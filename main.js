@@ -1,32 +1,38 @@
 import './style.css'
 
-import * as THREE from 'three.js';
+import * as THREE from 'three';
 
 import { OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
+import { AmbientLight } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { Scene } from 'three';
+import { PerspectiveCamera } from 'three';
+import { WebGLRenderer } from 'three';
+import { PCFSoftShadowMap } from 'three';
+import { Layers } from 'three';
 
 
-const scene = new THREE.Scene();
+const scene = new Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-const renderer = new THREE.WebGLRenderer({
+const renderer = new WebGLRenderer({
   canvas: document.querySelector('#bg'),
 });
 
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = PCFSoftShadowMap;
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
 
-const ambientLight = new THREE.AmbientLight( 0x404040 )
+const ambientLight = new AmbientLight( 0x404040 )
 ambientLight.intensity = .1;
 scene.add( ambientLight );
 
@@ -34,7 +40,7 @@ const renderScene = new RenderPass(scene, camera);
 
 const ENTIRE_SCENE = 0, BLOOM_SCENE = 1;
 
-const bloomLayer = new THREE.Layers();
+const bloomLayer = new Layers();
 bloomLayer.set( BLOOM_SCENE );
 
 const params = {
